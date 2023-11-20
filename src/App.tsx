@@ -1,8 +1,13 @@
+import { EditArea } from "./components/EditArea";
+import { Sidebar } from "./components/Sidebar";
+
+
 function App() {
   return (
-    <>
-      <div>hello world</div>
-    </>
+    <div className="container">
+      <Sidebar/>
+      <EditArea/>
+    </div>
   );
 }
 
