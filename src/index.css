@@ -1,5 +1,5 @@
 #root {
-  all:unset;
+  all: unset;
 }
 
 .EditAreaContainer{
@@ -17,7 +17,12 @@
   padding: 0;
   background-color: #454545;
   color: white;
+}
 
+.EditArea {
+  width: 75%;
+  height: 100%;
+  background-color: aqua;
 }
 .RecordContainer{
   width: 100%;
@@ -35,13 +40,13 @@
 
 
 
-.Sidebar{
+.Sidebar {
   width: 25%;
   height: 100%;
-  background-color: red;;
+  background-color: red;
 }
 
-.container{
+.container {
   display: flex;
   flex-direction: row;
   height: 100dvh;
@@ -52,7 +57,8 @@
   display: none;
 }
 
-html, body{
+html,
+body {
   padding: 0;
   margin: 0;
 }
