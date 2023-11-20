@@ -1,0 +1,28 @@
+#root {
+  all: unset;
+}
+
+.EditArea {
+  width: 75%;
+  height: 100%;
+  background-color: aqua;
+}
+
+.Sidebar {
+  width: 25%;
+  height: 100%;
+  background-color: red;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100dvh;
+  width: 100%;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
