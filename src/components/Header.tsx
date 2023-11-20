@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import RecordVoiceNote  from "./RecordVoiceNote";
+import React from "react";
+import { FilenameInput } from "./Sidebar/FilenameInput";
+import { Button } from "./Sidebar/button";
 
-export function Header(value: String) {
+export function EditorHeader({
+  value,
+  setValue,
+}: {
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+  };
 
-    const [fileName, setFileName] = useState<string>('file_name');
+  const saveCodeFile = () => {
+    const blob = new Blob([value], { type: "text/plain" });
+  };
 
-
-    const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFileName(event.target.value);
-      };
-
-    const saveCodeFile = () => {
-        const blob = new Blob([value], { type: 'text/plain' })
-      }
-
-    return (
-        <div className="header">
-            <h2 className="recordingName">File Name: </h2>
-        <input id="fileName" onChange={handleFileNameChange}/>
-        <button onClick={saveCodeFile}>Save</button>
-        </div>
-
-    );
+  return (
+    <div className="header flex justify-start items-center px-20 gap-6">
+      <Button>Save</Button>
+      <FilenameInput filename={value} />
+    </div>
+  );
 }

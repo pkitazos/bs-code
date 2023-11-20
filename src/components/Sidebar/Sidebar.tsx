@@ -8,7 +8,7 @@ export function Sidebar(props: {
 }) {
   const { files, functionRecordings } = props;
   return (
-    <div className="Sidebar bg-[#5E5B5B]">
+    <div className="text-white col-span-2 h-full bg-[#5E5B5B]">
       <div className="text-xl h-[5%] flex justify-start pl-10 items-center">
         project name
       </div>

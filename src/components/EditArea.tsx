@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import RecordVoiceNote  from "./RecordVoiceNote";
-import { Header } from "./Header";
+import RecordVoiceNote from "./RecordVoiceNote";
+import { EditorHeader } from "./Header";
 
 export function EditArea() {
-  
   const [value, setValue] = useState("");
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -11,14 +10,16 @@ export function EditArea() {
   console.log(value);
 
   return (
-    
     <div className="EditAreaContainer">
-      <Header/>
-      <textarea id="code"className="EditAreaInput" onChange={handleTextChange}/>
+      <EditorHeader />
+      <textarea
+        id="code"
+        className="EditAreaInput"
+        onChange={handleTextChange}
+      />
       <div className="RecordContainer">
-      <RecordVoiceNote/>
+        <RecordVoiceNote />
+      </div>
     </div>
-    </div>
-    
   );
 }
