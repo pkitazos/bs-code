@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 #root {
   all: unset;
 }
@@ -6,12 +10,6 @@
   width: 75%;
   height: 100%;
   background-color: aqua;
-}
-
-.Sidebar {
-  width: 25%;
-  height: 100%;
-  background-color: red;
 }
 
 .container {
@@ -25,4 +23,5 @@ html,
 body {
   padding: 0;
   margin: 0;
+  font-family: monospace;
 }
