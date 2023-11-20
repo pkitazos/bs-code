@@ -11,7 +11,7 @@
 
 .EditAreaInput{
   width: 100%;
-  height: 88%;
+  height: 80%;
   font-size: 28px;
   margin: 0;
   padding: 0;
@@ -36,6 +36,12 @@
 .recordingName{
   color:white;
   display: inline;
+}
+
+.header{
+  width:100%;
+  height: 10%;
+  background-color: #333332;
 }
 
 
