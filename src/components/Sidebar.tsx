@@ -13,7 +13,7 @@ export function Sidebar({
   return (
     <div className="text-white col-span-2 h-[100dvh] bg-neutral-900">
       <div className="text-xl h-[5dvh] flex justify-start pl-10 items-center">
-        project name
+        demo-project
       </div>
       <div className="h-[95dvh]">
         <div className="h-1/2">
