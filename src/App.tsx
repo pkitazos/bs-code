@@ -1,21 +1,60 @@
-import { MyEditor } from "./components/MyEditor";
+import { useWindowSize } from "@uidotdev/usehooks";
+import { useEffect, useState } from "react";
+
 import { Sidebar } from "./components/Sidebar/Sidebar";
-import { FileContext, useFileContext } from "./components/FileContext";
+import { MyEditor } from "./components/MyEditor";
 
 function App() {
-  const functionRecordings = ["func 1", "func 2", "func 3"];
-  const files = ["main.tsx", "app.tsx"];
+  const { width, height } = useWindowSize();
 
-  const { fileNames, addNewFile } = useFileContext();
+  const [allFiles, setAllFiles] = useState<CodeFile[]>([
+    {
+      fileName: "main.tsx",
+      code: "",
+      functions: [],
+      language: "JavaScript",
+    },
+    {
+      fileName: "app.tsx",
+      code: "",
+      functions: [],
+      language: "JavaScript",
+    },
+  ]);
+  const [activeFileIdx, setActiveFileIdx] = useState(-1);
 
+  const updateActiveFile = (changedFile: CodeFile) => {
+    const temp = allFiles;
+    temp[activeFileIdx] = changedFile;
+    setAllFiles(temp);
+  };
+
+  useEffect(() => {
+    console.log(activeFileIdx);
+  }, [activeFileIdx]);
+
+  if (!(height && width)) return;
   return (
-    <FileContext.Provider value={{ fileNames, addNewFile }}>
-      <div className="grid grid-cols-10 h-[100dvh]">
-        <Sidebar functionRecordings={functionRecordings} files={files} />
-        {/* <EditArea /> */}
-        <MyEditor />
-      </div>
-    </FileContext.Provider>
+    <div className="grid grid-cols-10 h-[100dvh]">
+      <Sidebar
+        allFiles={allFiles}
+        activeFileIdx={activeFileIdx}
+        setActiveFileIdx={setActiveFileIdx}
+      />
+      {activeFileIdx !== -1 ? (
+        <MyEditor
+          allFiles={allFiles}
+          activeFileIdx={activeFileIdx}
+          updateActiveFile={updateActiveFile}
+          width={width}
+          height={height}
+        />
+      ) : (
+        <div className="h-[5dvh] col-span-8 bg-slate-800 flex justify-start items-center px-20 gap-6">
+          &nbsp;
+        </div>
+      )}
+    </div>
   );
 }
 
