@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { MyEditor } from "./components/MyEditor";
+import RecordVoiceNote from "./components/RecordVoiceNote";
 
 function App() {
   const { width, height } = useWindowSize();
@@ -41,19 +42,22 @@ function App() {
         activeFileIdx={activeFileIdx}
         setActiveFileIdx={setActiveFileIdx}
       />
-      {activeFileIdx !== -1 ? (
-        <MyEditor
-          allFiles={allFiles}
-          activeFileIdx={activeFileIdx}
-          updateActiveFile={updateActiveFile}
-          width={width}
-          height={height}
-        />
-      ) : (
-        <div className="h-[5dvh] col-span-8 bg-slate-800 flex justify-start items-center px-20 gap-6">
-          &nbsp;
-        </div>
-      )}
+      <div className="col-span-8 bg-slate-700 h-[90dvh]">
+        {activeFileIdx !== -1 ? (
+          <MyEditor
+            allFiles={allFiles}
+            activeFileIdx={activeFileIdx}
+            updateActiveFile={updateActiveFile}
+            width={width}
+            height={height}
+          />
+        ) : (
+          <div className="h-[5dvh] bg-slate-800 flex justify-start items-center px-20 gap-6">
+            &nbsp;
+          </div>
+        )}
+        <RecordVoiceNote />
+      </div>
     </div>
   );
 }
