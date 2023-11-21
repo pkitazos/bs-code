@@ -1,14 +1,18 @@
-import { useEffect } from "react";
-import MonacoEditor from "react-monaco-editor";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import MonacoEditor, {
+  type EditorConstructionOptions,
+} from "react-monaco-editor";
 import { getFunctions } from "../utils/getFunctions";
-import { Button } from "./Sidebar/button";
+import { Button } from "./Button";
 
 interface EditorProps {
   width: number;
   height: number;
   allFiles: CodeFile[];
   activeFileIdx: number;
-  updateActiveFile: (_: CodeFile) => void;
+  closeTab: () => void;
+  setAllFiles: (_: CodeFile[]) => void;
 }
 
 export function MyEditor({
@@ -16,47 +20,58 @@ export function MyEditor({
   height,
   allFiles,
   activeFileIdx,
-  updateActiveFile,
+  closeTab,
+  setAllFiles,
 }: EditorProps) {
+  const [currentCode, setCurrentCode] = useState("");
   const activeFile = allFiles[activeFileIdx];
+
   const updateCode = (changedCode: string) => {
-    console.log(changedCode);
-    const temp: CodeFile = {
-      code: changedCode,
-      fileName: activeFile.fileName,
-      functions: activeFile.functions,
-      language: activeFile.language,
-    };
-    updateActiveFile(temp);
+    setCurrentCode(changedCode);
   };
 
   const handleSave = () => {
-    console.log(activeFile);
-    const functions = getFunctions(activeFile);
-    console.log(functions);
+    console.log("before save", activeFile);
+    const parsedFunctions = getFunctions(currentCode, activeFile.language);
+    console.log(parsedFunctions);
+    const changedFile: CodeFile = {
+      code: currentCode,
+      fileName: activeFile.fileName,
+      functions: parsedFunctions.map((item) => ({
+        name: item,
+        mediaRecordingPath: "",
+      })),
+
+      language: activeFile.language,
+    };
+
+    const temp = structuredClone(allFiles);
+    temp[activeFileIdx] = changedFile;
+    setAllFiles(temp);
   };
 
   useEffect(() => {
-    console.log(activeFile.code);
-  }, [activeFile.code]);
-
-  useEffect(() => {
-    console.log(activeFileIdx);
-    console.log(allFiles[activeFileIdx]);
-  }, [allFiles, activeFileIdx]);
+    console.log(currentCode);
+  }, [currentCode]);
 
   return (
     <div className="col-span-8 h-[100dvh]">
-      <div className="h-[5dvh] bg-slate-800 flex justify-start items-center px-20 gap-6">
-        <Button size="sm" onClick={handleSave}>
-          Save
-        </Button>
-        <div className="text-white">{activeFile.fileName} </div>
+      <div className="h-[5dvh] bg-neutral-900 flex justify-start items-center">
+        <div className="flex gap-6 items-center bg-neutral-800 h-full px-5">
+          <div className="text-white">{activeFile.fileName} </div>
+          <Button size="sm" onClick={handleSave}>
+            Save
+          </Button>
+          <button onClick={closeTab}>
+            <X className="w-9 h-9 text-white hover:bg-neutral-700 rounded-md p-2" />
+          </button>
+        </div>
       </div>
       <MonacoEditor
+        options={options}
         width={0.8 * width}
         height={0.95 * height}
-        language="javascript"
+        language="python"
         theme="vs-dark"
         value={activeFile.code}
         onChange={updateCode}
@@ -64,3 +79,25 @@ export function MyEditor({
     </div>
   );
 }
+
+const options = {
+  autoIndent: "full",
+  contextmenu: true,
+  fontFamily: "monospace",
+  fontSize: 13,
+  lineHeight: 24,
+  hideCursorInOverviewRuler: true,
+  matchBrackets: "always",
+  minimap: {
+    enabled: true,
+  },
+  scrollbar: {
+    horizontalSliderSize: 4,
+    verticalSliderSize: 18,
+  },
+  selectOnLineNumbers: true,
+  roundedSelection: false,
+  readOnly: false,
+  cursorStyle: "line",
+  automaticLayout: true,
+} as EditorConstructionOptions;

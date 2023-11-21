@@ -1,22 +1,21 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
-
-import { Sidebar } from "./components/Sidebar/Sidebar";
 import { MyEditor } from "./components/MyEditor";
 import RecordVoiceNote from "./components/RecordVoiceNote";
+import { Sidebar } from "./components/Sidebar";
 
 function App() {
   const { width, height } = useWindowSize();
 
   const [allFiles, setAllFiles] = useState<CodeFile[]>([
     {
-      fileName: "main.tsx",
+      fileName: "main.py",
       code: "",
       functions: [],
-      language: "JavaScript",
+      language: "Python",
     },
     {
-      fileName: "app.tsx",
+      fileName: "app.js",
       code: "",
       functions: [],
       language: "JavaScript",
@@ -24,10 +23,8 @@ function App() {
   ]);
   const [activeFileIdx, setActiveFileIdx] = useState(-1);
 
-  const updateActiveFile = (changedFile: CodeFile) => {
-    const temp = allFiles;
-    temp[activeFileIdx] = changedFile;
-    setAllFiles(temp);
+  const closeTab = () => {
+    setActiveFileIdx(-1);
   };
 
   useEffect(() => {
@@ -42,17 +39,18 @@ function App() {
         activeFileIdx={activeFileIdx}
         setActiveFileIdx={setActiveFileIdx}
       />
-      <div className="col-span-8 bg-slate-700 h-[90dvh]">
+      <div className="col-span-8 bg-neutral-800 h-[95dvh]">
         {activeFileIdx !== -1 ? (
           <MyEditor
             allFiles={allFiles}
             activeFileIdx={activeFileIdx}
-            updateActiveFile={updateActiveFile}
+            setAllFiles={setAllFiles}
+            closeTab={closeTab}
             width={width}
             height={height}
           />
         ) : (
-          <div className="h-[5dvh] bg-slate-800 flex justify-start items-center px-20 gap-6">
+          <div className="h-[5dvh] bg-neutral-800 flex justify-start items-center px-20 gap-6">
             &nbsp;
           </div>
         )}

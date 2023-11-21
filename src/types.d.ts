@@ -1,3 +1,5 @@
+type SupportedLanguage = "unset" | "Python" | "JavaScript";
+
 interface FunctionRecording {
   name: string;
   mediaRecordingPath: string;
@@ -6,6 +8,6 @@ interface FunctionRecording {
 interface CodeFile {
   fileName: string;
   code: string;
-  language: "unset" | "Python" | "JavaScript";
+  language: SupportedLanguage;
   functions: FunctionRecording[];
 }

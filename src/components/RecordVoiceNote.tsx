@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import { Mic } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactMic } from "react-mic";
 import "../RecordVoiceNote.css";
+import { Button } from "./Button";
 
-const RecordVoiceNote: React.FC = () => {
+function RecordVoiceNote() {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [fileName, setFileName] = useState<string>("recorded_audio");
@@ -42,11 +44,12 @@ const RecordVoiceNote: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-0 w-full h-[10dvh] bg-slate-900 text-white">
+    <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
       <div>
-        <button onClick={handleRecordChange}>
+        <Button size="sm" onClick={handleRecordChange}>
+          <Mic className="w-4 h-4" />
           {isRecording ? "Recording..." : "Start Recording"}
-        </button>
+        </Button>
         {audioBlob && (
           <div className="audioControls">
             <audio ref={audioRef} controls />
@@ -70,6 +73,6 @@ const RecordVoiceNote: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RecordVoiceNote;
