@@ -1,11 +1,11 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
-import { MyEditor } from "./components/MyEditor";
-import RecordVoiceNote from "./components/RecordVoiceNote";
-import { Sidebar } from "./components/Sidebar";
+import { MyEditor, RecordVoiceNote, Sidebar } from "./components";
 
 function App() {
   const { width, height } = useWindowSize();
+
+  const [blobs, setBlobs] = useState<string[]>([]);
 
   const [allFiles, setAllFiles] = useState<CodeFile[]>([
     {
@@ -31,6 +31,10 @@ function App() {
     console.log(activeFileIdx);
   }, [activeFileIdx]);
 
+  useEffect(() => {
+    console.log("blobs:", blobs);
+  }, [blobs]);
+
   if (!(height && width)) return;
   return (
     <div className="grid grid-cols-10 h-[100dvh]">
@@ -54,7 +58,7 @@ function App() {
             &nbsp;
           </div>
         )}
-        <RecordVoiceNote />
+        <RecordVoiceNote setBlobs={setBlobs} />
       </div>
     </div>
   );

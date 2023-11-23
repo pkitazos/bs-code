@@ -4,7 +4,11 @@ import { ReactMic } from "react-mic";
 import "../RecordVoiceNote.css";
 import { Button } from "./Button";
 
-function RecordVoiceNote() {
+export function RecordVoiceNote({
+  setBlobs,
+}: {
+  setBlobs: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [fileName, setFileName] = useState<string>("recorded_audio");
@@ -31,15 +35,17 @@ function RecordVoiceNote() {
       audioRef.current.src = audioUrl;
       audioRef.current.play();
     }
+    // console.log({ audioBlob });
   }, [audioBlob]);
 
   const saveRecording = () => {
     if (audioBlob) {
       const audioUrl = URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      a.href = audioUrl;
-      a.download = `${fileName}.wav`;
-      a.click();
+      setBlobs((prev) => [...prev, audioUrl]);
+      // const a = document.createElement("a");
+      // a.href = audioUrl;
+      // a.download = `${fileName}.wav`;
+      // a.click();
     }
   };
 
@@ -51,11 +57,17 @@ function RecordVoiceNote() {
           {isRecording ? "Recording..." : "Start Recording"}
         </Button>
         {audioBlob && (
-          <div className="audioControls">
+          <div className="flex gap-4">
             <audio ref={audioRef} controls />
             <h2 className="recordingName">Recording Name: </h2>
-            <input id="recordingName" onChange={handleFileNameChange} />
-            <button onClick={saveRecording}>Save Recording</button>
+            <input
+              className="text-black"
+              id="recordingName"
+              onChange={handleFileNameChange}
+            />
+            <button className="bg-red-500" onClick={saveRecording}>
+              Save Recording
+            </button>
           </div>
         )}
       </div>
@@ -74,5 +86,3 @@ function RecordVoiceNote() {
     </div>
   );
 }
-
-export default RecordVoiceNote;

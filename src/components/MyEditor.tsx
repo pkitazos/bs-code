@@ -31,15 +31,14 @@ export function MyEditor({
   };
 
   const handleSave = () => {
-    console.log("before save", activeFile);
     const parsedFunctions = getFunctions(currentCode, activeFile.language);
-    console.log(parsedFunctions);
+
     const changedFile: CodeFile = {
       code: currentCode,
       fileName: activeFile.fileName,
       functions: parsedFunctions.map((item) => ({
         name: item,
-        mediaRecordingPath: "",
+        audioURL: "",
       })),
 
       language: activeFile.language,
@@ -48,6 +47,7 @@ export function MyEditor({
     const temp = structuredClone(allFiles);
     temp[activeFileIdx] = changedFile;
     setAllFiles(temp);
+    console.log(changedFile);
   };
 
   useEffect(() => {
