@@ -55,7 +55,7 @@ export function MyEditor({
   }, [currentCode]);
 
   return (
-    <div className="col-span-8 h-[100dvh]">
+    <div className="col-span-8 h-[100dvh] fixed bottom-0">
       <div className="h-[5dvh] bg-neutral-900 flex justify-start items-center">
         <div className="flex gap-6 items-center bg-neutral-800 h-full px-5">
           <div className="text-white">{activeFile.fileName} </div>

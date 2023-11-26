@@ -48,8 +48,12 @@ export function Sidebar({
           <ul className="pl-10 pt-10">
             {activeFileIdx !== -1 &&
               allFiles[activeFileIdx].functions.length !== 0 &&
-              allFiles[activeFileIdx].functions.map(({ name }, i) => (
+              allFiles[activeFileIdx].functions.map(({ name, audioURL }, i) => (
+                <div>
                 <li key={i}>{name}</li>
+                {audioURL && <audio src={audioURL} controls />}
+                </div>
+
               ))}
           </ul>
         </div>

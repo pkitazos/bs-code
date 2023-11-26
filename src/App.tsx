@@ -45,14 +45,16 @@ function App() {
       />
       <div className="col-span-8 bg-neutral-800 h-[100dvh]">
         {activeFileIdx !== -1 ? (
-          <><MyEditor
+          <>
+          <MyEditor
             allFiles={allFiles}
             activeFileIdx={activeFileIdx}
             setAllFiles={setAllFiles}
             closeTab={closeTab}
             width={width}
             height={height} />
-            <RecordVoiceNote setBlobs={setBlobs} /></>
+            <RecordVoiceNote setBlobs={setBlobs} allFiles={allFiles} activeFileIdx = {activeFileIdx} />
+            </>
           
         ) : (
           <div className="h-[5dvh] bg-neutral-800 flex justify-start items-center px-20 gap-6">
