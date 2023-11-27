@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MonacoEditor, {
   type EditorConstructionOptions,
 } from "react-monaco-editor";
@@ -15,7 +15,7 @@ interface EditorProps {
   setAllFiles: (_: CodeFile[]) => void;
 }
 
-export function MyEditor({
+export function Editor({
   width,
   height,
   allFiles,
@@ -31,31 +31,28 @@ export function MyEditor({
   };
 
   const handleSave = () => {
-    console.log("before save", activeFile);
     const parsedFunctions = getFunctions(currentCode, activeFile.language);
-    console.log(parsedFunctions);
+
     const changedFile: CodeFile = {
       code: currentCode,
       fileName: activeFile.fileName,
       functions: parsedFunctions.map((item) => ({
         name: item,
-        mediaRecordingPath: "",
+        audioURL:
+          activeFile.functions.find((obj) => obj.name === item)?.audioURL ?? "",
       })),
 
       language: activeFile.language,
     };
 
+    console.log(activeFile.functions);
     const temp = structuredClone(allFiles);
     temp[activeFileIdx] = changedFile;
     setAllFiles(temp);
   };
 
-  useEffect(() => {
-    console.log(currentCode);
-  }, [currentCode]);
-
   return (
-    <div className="col-span-8 h-[100dvh]">
+    <div className="col-span-8 h-[100dvh] fixed bottom-0">
       <div className="h-[5dvh] bg-neutral-900 flex justify-start items-center">
         <div className="flex gap-6 items-center bg-neutral-800 h-full px-5">
           <div className="text-white">{activeFile.fileName} </div>
@@ -71,7 +68,6 @@ export function MyEditor({
         options={options}
         width={0.8 * width}
         height={0.95 * height}
-        language="python"
         theme="vs-dark"
         value={activeFile.code}
         onChange={updateCode}

@@ -4,56 +4,5 @@
 
 #root {
   all: unset;
-}
-
-.EditAreaContainer {
-  width: 75%;
-  height: 100%;
-  background-color: #454545;
-}
-
-.EditAreaInput {
-  width: 100%;
-  height: 80%;
-  font-size: 28px;
-  margin: 0;
-  padding: 0;
-  background-color: #454545;
-  color: white;
-}
-
-.EditArea {
-  width: 75%;
-  height: 100%;
-  background-color: aqua;
-}
-.RecordContainer {
-  width: 100%;
-  height: 10%;
-  background-color: #333332;
-}
-
-.audioControls {
-  display: inline;
-}
-.recordingName {
-  color: white;
-  display: inline;
-}
-
-.header {
-  width: 100%;
-  height: 10%;
-  background-color: #333332;
-}
-
-.hideAudio {
-  display: none;
-}
-
-html,
-body {
-  padding: 0;
-  margin: 0;
   font-family: monospace;
 }

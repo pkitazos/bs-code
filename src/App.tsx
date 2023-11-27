@@ -1,11 +1,11 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
-import { MyEditor } from "./components/MyEditor";
-import RecordVoiceNote from "./components/RecordVoiceNote";
-import { Sidebar } from "./components/Sidebar";
+import { MyEditor, RecordVoiceNote, Sidebar } from "./components";
 
 function App() {
   const { width, height } = useWindowSize();
+
+  const [blobs, setBlobs] = useState<string[]>([]);
 
   const [allFiles, setAllFiles] = useState<CodeFile[]>([
     {
@@ -23,6 +23,7 @@ function App() {
   ]);
   const [activeFileIdx, setActiveFileIdx] = useState(-1);
 
+
   const closeTab = () => {
     setActiveFileIdx(-1);
   };
@@ -30,6 +31,10 @@ function App() {
   useEffect(() => {
     console.log(activeFileIdx);
   }, [activeFileIdx]);
+
+  useEffect(() => {
+    console.log("blobs:", blobs);
+  }, [blobs]);
 
   if (!(height && width)) return;
   return (
@@ -39,22 +44,25 @@ function App() {
         activeFileIdx={activeFileIdx}
         setActiveFileIdx={setActiveFileIdx}
       />
-      <div className="col-span-8 bg-neutral-800 h-[95dvh]">
+      <div className="col-span-8 bg-neutral-800 h-[100dvh]">
         {activeFileIdx !== -1 ? (
+          <>
           <MyEditor
             allFiles={allFiles}
             activeFileIdx={activeFileIdx}
             setAllFiles={setAllFiles}
             closeTab={closeTab}
             width={width}
-            height={height}
-          />
+            height={height} />
+            <RecordVoiceNote setBlobs={setBlobs} allFiles={allFiles} activeFileIdx = {activeFileIdx} />
+            </>
+          
         ) : (
           <div className="h-[5dvh] bg-neutral-800 flex justify-start items-center px-20 gap-6">
             &nbsp;
           </div>
         )}
-        <RecordVoiceNote />
+        
       </div>
     </div>
   );
