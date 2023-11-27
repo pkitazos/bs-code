@@ -10,5 +10,5 @@ You can then run `pnpm i` to install all the dependencies.
 
 ### Libraries in use
 
-- [Tailwindcss](https://tailwindcss.com/) (install VSCode [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) to make your life easier/)
+- [Tailwindcss](https://tailwindcss.com/) (install VSCode [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) to make your life easier)
 - [Lucide](https://lucide.dev/icons/) (in case you need any icons for any components you're building)
