@@ -1,4 +1,6 @@
-## Getting Started
+## For Devs
+
+### Getting Started
 
 If you don't have `pnpm` isntalled, you can run the following to install it globally:
 
