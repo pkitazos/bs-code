@@ -24,12 +24,12 @@ const customStyles = {
 };
 
 export function RecordVoiceNote({
-  setBlobs,
   allFiles,
+  setAllFiles,
   activeFileIdx,
 }: {
-  setBlobs: React.Dispatch<React.SetStateAction<string[]>>;
   allFiles: CodeFile[];
+  setAllFiles: React.Dispatch<React.SetStateAction<CodeFile[]>>;
   activeFileIdx: number;
 }) {
   const [isRecording, setIsRecording] = useState(false);
@@ -44,21 +44,26 @@ export function RecordVoiceNote({
     setModalIsOpen(false);
   };
 
-  const options = allFiles.flatMap((file) =>
-    file.functions
-      .filter((item) => item.audioURL === "")
-      .map((item) => ({ value: item.name, label: item.name }))
-  );
+  const options = allFiles[activeFileIdx].functions
+    .filter((item) => item.audioURL === "")
+    .map((item) => ({ value: item.name, label: item.name }));
 
   const handleSave = () => {
     const audioUrl = URL.createObjectURL(audioBlob!);
-    setBlobs((prev) => [...prev, audioUrl]);
 
-    const fileFns = allFiles[activeFileIdx].functions;
-    const selectedFn = fileFns.find((obj) => obj.name === selected?.label);
+    const temp = structuredClone(allFiles);
 
-    if (selectedFn) selectedFn.audioURL = audioUrl;
+    const selectedFn = temp[activeFileIdx].functions.find(
+      (obj) => obj.name === selected?.label
+    );
 
+    const idx = allFiles[activeFileIdx].functions
+      .map((item) => item.name)
+      .indexOf(selectedFn!.name);
+
+    temp[activeFileIdx].functions[idx].audioURL = audioUrl;
+
+    setAllFiles(temp);
     closeModal();
   };
 

@@ -5,8 +5,6 @@ import { Editor, RecordVoiceNote, Sidebar } from "./components";
 function App() {
   const { width, height } = useWindowSize();
 
-  const [blobs, setBlobs] = useState<string[]>([]);
-
   const [allFiles, setAllFiles] = useState<CodeFile[]>([
     {
       fileName: "main.py",
@@ -22,10 +20,6 @@ function App() {
     },
   ]);
   const [activeFileIdx, setActiveFileIdx] = useState(-1);
-
-  const closeTab = () => {
-    setActiveFileIdx(-1);
-  };
 
   if (!(height && width)) return;
   return (
@@ -43,14 +37,14 @@ function App() {
               allFiles={allFiles}
               activeFileIdx={activeFileIdx}
               setAllFiles={setAllFiles}
-              closeTab={closeTab}
+              setActiveFileIdx={setActiveFileIdx}
               width={width}
               height={height}
             />
             <RecordVoiceNote
-              setBlobs={setBlobs}
               allFiles={allFiles}
               activeFileIdx={activeFileIdx}
+              setAllFiles={setAllFiles}
             />
           </>
         ) : (

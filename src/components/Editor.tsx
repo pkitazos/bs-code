@@ -11,8 +11,8 @@ interface EditorProps {
   height: number;
   allFiles: CodeFile[];
   activeFileIdx: number;
-  closeTab: () => void;
-  setAllFiles: (_: CodeFile[]) => void;
+  setActiveFileIdx: React.Dispatch<React.SetStateAction<number>>;
+  setAllFiles: React.Dispatch<React.SetStateAction<CodeFile[]>>;
 }
 
 export function Editor({
@@ -20,7 +20,7 @@ export function Editor({
   height,
   allFiles,
   activeFileIdx,
-  closeTab,
+  setActiveFileIdx,
   setAllFiles,
 }: EditorProps) {
   const [currentCode, setCurrentCode] = useState("");
@@ -45,7 +45,6 @@ export function Editor({
       language: activeFile.language,
     };
 
-    console.log(activeFile.functions);
     const temp = structuredClone(allFiles);
     temp[activeFileIdx] = changedFile;
     setAllFiles(temp);
@@ -59,7 +58,7 @@ export function Editor({
           <Button size="sm" onClick={handleSave}>
             Save
           </Button>
-          <button onClick={closeTab}>
+          <button onClick={() => setActiveFileIdx(-1)}>
             <X className="w-9 h-9 text-white hover:bg-neutral-700 rounded-md p-2" />
           </button>
         </div>
@@ -85,7 +84,7 @@ const options = {
   hideCursorInOverviewRuler: true,
   matchBrackets: "always",
   minimap: {
-    enabled: true,
+    enabled: false,
   },
   scrollbar: {
     horizontalSliderSize: 4,
