@@ -32,22 +32,23 @@ export function MyEditor({
 
   const handleSave = () => {
     const parsedFunctions = getFunctions(currentCode, activeFile.language);
-
+    
     const changedFile: CodeFile = {
       code: currentCode,
       fileName: activeFile.fileName,
       functions: parsedFunctions.map((item) => ({
         name: item,
-        audioURL: "",
+        audioURL:activeFile.functions.find(obj => obj.name === item)?.audioURL ?? "",
       })),
 
       language: activeFile.language,
     };
 
+    console.log(activeFile.functions)
     const temp = structuredClone(allFiles);
     temp[activeFileIdx] = changedFile;
     setAllFiles(temp);
-    console.log(changedFile);
+    // console.log(changedFile);
   };
 
   useEffect(() => {

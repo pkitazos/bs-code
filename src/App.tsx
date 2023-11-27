@@ -23,6 +23,7 @@ function App() {
   ]);
   const [activeFileIdx, setActiveFileIdx] = useState(-1);
 
+
   const closeTab = () => {
     setActiveFileIdx(-1);
   };
