@@ -1,65 +1,138 @@
-import { Mic, Play, Trash2 } from "lucide-react"; // Assuming Play and Trash2 are icons for playback and delete
-import React, { useState, useRef } from "react";
-import { Button } from "./Button";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Mic, Save, Trash2, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactMic } from "react-mic";
-import "../RecordVoiceNote.css";
+import Select from "react-select";
+import { Button } from "./Button";
 
-function RecordVoiceNote() {
+type SelectOption = { value: string; label: string };
+
+// new dropdown changes, style away guys!
+
+const customStyles = {
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? "grey" : "white",
+    color: state.isSelected ? "white" : "black",
+  }),
+  control: (provided: any) => ({
+    ...provided,
+    backgroundColor: "lightgrey",
+    color: "white",
+  }),
+};
+
+export function RecordVoiceNote({
+  setBlobs,
+  allFiles,
+  activeFileIdx,
+}: {
+  setBlobs: React.Dispatch<React.SetStateAction<string[]>>;
+  allFiles: CodeFile[];
+  activeFileIdx: number;
+}) {
+  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [fileName, setFileName] = useState<string>("recorded_audio");
+  const [selected, setSelected] = useState<SelectOption | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [modal, setModal] = useState(false);
-  const [selectedFunction, setSelectedFunction] = useState<string | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const toggleModal = () => {
-    setModal(!modal);
-    // Reset selected function when closing the modal
-    setSelectedFunction(null);
+  const closeModal = () => {
+    setAudioBlob(null);
+    setSelected(null);
+    setModalIsOpen(false);
   };
 
-  const handleFunctionSelect = (selectedFunc: string) => {
-    setSelectedFunction(selectedFunc);
+  const options = allFiles.flatMap((file) =>
+    file.functions
+      .filter((item) => item.audioURL === "")
+      .map((item) => ({ value: item.name, label: item.name }))
+  );
+
+  const handleSave = () => {
+    const audioUrl = URL.createObjectURL(audioBlob!);
+    setBlobs((prev) => [...prev, audioUrl]);
+
+    const fileFns = allFiles[activeFileIdx].functions;
+    const selectedFn = fileFns.find((obj) => obj.name === selected?.label);
+
+    if (selectedFn) selectedFn.audioURL = audioUrl;
+
+    closeModal();
   };
+
+  useEffect(() => {
+    if (audioBlob && audioRef.current) {
+      audioRef.current.src = URL.createObjectURL(audioBlob);
+    }
+  }, [audioBlob]);
 
   return (
-    <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
-      <div>
-        <Button className="record-voice-note-button" size="sm" onClick={toggleModal}>
+    <>
+      <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
+        <Button
+          className="bg-red-900 hover:bg-red-950"
+          size="sm"
+          onClick={() => setModalIsOpen(true)}
+        >
           <Mic className="w-4 h-4" />
           Record Voice Note
         </Button>
+        <ReactMic
+          className="hidden"
+          record={isRecording}
+          onStop={(e) => setAudioBlob(e.blob)}
+          strokeColor="transparent"
+          backgroundColor="transparent"
+        />
       </div>
-
-      {modal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-modal" onClick={toggleModal}>
-              &times;
-            </button>
-            <h2>Select Function:</h2>
-            <select className="function-selector"
-              onChange={(e) => handleFunctionSelect(e.target.value)}
-            >
-              <option value="function1">Function 1</option>
-              <option value="function2">Function 2</option>
-              <option value="function1">Function 3</option>
-              <option value="function2">Function 4</option>
-            </select>
-
-            {selectedFunction && (
+      {modalIsOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-[rgba(0, 0, 0, 0.5)] justify-center items-center flex">
+          <div className="bg-black p-5 rounded-sm shadow-lg flex flex-col gap-2 min-w-[400px]">
+            <div className="flex w-full justify-end">
+              <Button size="sm" className="bg-transparent" onClick={closeModal}>
+                <X />
+              </Button>
+            </div>
+            <h2 className="text-white">Select Function:</h2>
+            <Select
+              value={selected}
+              onChange={setSelected}
+              options={options}
+              styles={customStyles}
+              menuPlacement="top"
+            />
+            {selected && audioBlob && (
+              <audio className="mt-4 mb-2 w-full" ref={audioRef} controls />
+            )}
+            {selected && (
               <>
-                <h2>Audio Length: 00:00</h2>
-                <div className="button-container">
-                  <Button className="record-button" size={"sm"}>
+                <div className="flex justify-between gap-3 mt-2.5">
+                  <Button
+                    className="bg-red-900 hover:bg-red-950"
+                    size="sm"
+                    onClick={() => setIsRecording(!isRecording)}
+                  >
                     <Mic className="w-4 h-4" />
-                    Record</Button>
-                  <Button size={"sm"}>
-                    <Play className="w-4 h-4" />
-                    Playback
+                    {isRecording ? "Stop Recording" : "Start Recording"}
                   </Button>
-                  <Button size={"sm"}>
+                  <Button
+                    size="sm"
+                    disabled={!audioBlob}
+                    onClick={() => setAudioBlob(null)}
+                  >
                     <Trash2 className="w-4 h-4" />
-                    Delete
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-lime-600"
+                    disabled={!audioBlob}
+                    size="sm"
+                    onClick={handleSave}
+                  >
+                    <Save className="w-4 h-4" />
+                    Save
                   </Button>
                 </div>
               </>
@@ -67,95 +140,6 @@ function RecordVoiceNote() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
-
-export default RecordVoiceNote;
-
-
-
-
-
-/*
-import { Mic } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
-import { ReactMic } from "react-mic";
-import "../RecordVoiceNote.css";
-import { Button } from "./Button";
-
-function RecordVoiceNote() {
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [fileName, setFileName] = useState<string>("recorded_audio");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const handleRecordChange = () => {
-    const current_state = isRecording;
-    setIsRecording(!current_state);
-    if (current_state) handleRecordStop;
-  };
-
-  const handleFileNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFileName(event.target.value);
-  };
-
-  const handleRecordStop = (recordedBlob: { blob: Blob }) => {
-    setAudioBlob(recordedBlob.blob);
-    setIsRecording(false);
-  };
-
-  useEffect(() => {
-    if (audioBlob && audioRef.current) {
-      const audioUrl = URL.createObjectURL(audioBlob);
-      audioRef.current.src = audioUrl;
-      audioRef.current.play();
-    }
-  }, [audioBlob]);
-
-  const saveRecording = () => {
-    if (audioBlob) {
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      a.href = audioUrl;
-      a.download = `${fileName}.wav`;
-      a.click();
-    }
-  };
-
-  return (
-    <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
-      <div>
-        <Button size="sm" onClick={handleRecordChange}>
-          <Mic className="w-4 h-4" />
-          {isRecording ? "Recording..." : "Start Recording"}
-        </Button>
-        {audioBlob && (
-          <div className="audioControls">
-            <audio ref={audioRef} controls />
-            <h2 className="recordingName">Recording Name: </h2>
-            <input id="recordingName" onChange={handleFileNameChange} />
-            <button onClick={saveRecording}>Save Recording</button>
-          </div>
-        )}
-      </div>
-      <div className="hideAudio">
-        <ReactMic
-          record={isRecording}
-          onStop={handleRecordStop}
-          onData={(recordedData) => {
-            // Handle real-time data if needed
-            console.log("Recording data is available:", recordedData);
-          }}
-          strokeColor="transparent"
-          backgroundColor="transparent"
-        />
-      </div>
-    </div>
-  );
-}
-
-
-
-
-*/

@@ -11,13 +11,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preline/accordion": "^2.0.1",
+    "@preline/collapse": "^2.0.1",
+    "@radix-ui/react-accordion": "^1.1.2",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.0.0",
     "lucide-react": "^0.292.0",
+    "rc-dropdown": "^4.1.0",
+    "rc-menu": "^9.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-mic": "^12.4.6",
     "react-monaco-editor": "^0.54.0",
+    "react-select": "^5.8.0",
     "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
