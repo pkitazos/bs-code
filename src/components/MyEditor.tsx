@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MonacoEditor, {
   type EditorConstructionOptions,
 } from "react-monaco-editor";
@@ -15,7 +15,7 @@ interface EditorProps {
   setAllFiles: (_: CodeFile[]) => void;
 }
 
-export function MyEditor({
+export function Editor({
   width,
   height,
   allFiles,
@@ -32,28 +32,24 @@ export function MyEditor({
 
   const handleSave = () => {
     const parsedFunctions = getFunctions(currentCode, activeFile.language);
-    
+
     const changedFile: CodeFile = {
       code: currentCode,
       fileName: activeFile.fileName,
       functions: parsedFunctions.map((item) => ({
         name: item,
-        audioURL:activeFile.functions.find(obj => obj.name === item)?.audioURL ?? "",
+        audioURL:
+          activeFile.functions.find((obj) => obj.name === item)?.audioURL ?? "",
       })),
 
       language: activeFile.language,
     };
 
-    console.log(activeFile.functions)
+    console.log(activeFile.functions);
     const temp = structuredClone(allFiles);
     temp[activeFileIdx] = changedFile;
     setAllFiles(temp);
-    // console.log(changedFile);
   };
-
-  useEffect(() => {
-    console.log(currentCode);
-  }, [currentCode]);
 
   return (
     <div className="col-span-8 h-[100dvh] fixed bottom-0">
@@ -72,7 +68,6 @@ export function MyEditor({
         options={options}
         width={0.8 * width}
         height={0.95 * height}
-        language="python"
         theme="vs-dark"
         value={activeFile.code}
         onChange={updateCode}

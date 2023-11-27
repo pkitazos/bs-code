@@ -1,6 +1,3 @@
-import { FilePlus, FolderPlus } from "lucide-react";
-import { Button } from "./Button";
-
 export function Sidebar({
   allFiles,
   activeFileIdx,
@@ -19,14 +16,6 @@ export function Sidebar({
         <div className="h-1/2">
           <div className="bg-neutral-800 flex justify-between px-10 py-2 items-center font-semibold">
             My Files
-            <div className="flex gap-2 justify-center">
-              <Button size="sm">
-                <FilePlus className="w-5 h-5 place-self-center" />
-              </Button>
-              <Button size="sm">
-                <FolderPlus className="w-5 h-5 place-self-center" />
-              </Button>
-            </div>
           </div>
           <ul className="pl-10 pt-10 flex flex-col gap-4">
             {allFiles.map(({ fileName }, i) => (
@@ -49,11 +38,10 @@ export function Sidebar({
             {activeFileIdx !== -1 &&
               allFiles[activeFileIdx].functions.length !== 0 &&
               allFiles[activeFileIdx].functions.map(({ name, audioURL }, i) => (
-                <div>
-                <li key={i}>{name}</li>
-                {audioURL && <audio src={audioURL} controls />}
-                </div>
-
+                <>
+                  <li key={i}>{name}</li>
+                  {audioURL && <audio key={i} src={audioURL} controls />}
+                </>
               ))}
           </ul>
         </div>
