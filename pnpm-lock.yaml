@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@preline/accordion':
+    specifier: ^2.0.1
+    version: 2.0.1
+  '@preline/collapse':
+    specifier: ^2.0.1
+    version: 2.0.1
   '@uidotdev/usehooks':
     specifier: ^2.4.1
     version: 2.4.1(react-dom@18.2.0)(react@18.2.0)
@@ -621,6 +627,14 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@preline/accordion@2.0.1:
+    resolution: {integrity: sha512-Tp8lAtsbye6GnOff1RcsM1vOz0dYf/b/wRe/2fGjxL4baoP6TfWHwQlGk5Uvb2s6JxyDOFFxdM2sfHqAeneQIg==}
+    dev: false
+
+  /@preline/collapse@2.0.1:
+    resolution: {integrity: sha512-/+pfIbRHRJYYOVHCvuveKiDDf1m7WQH3jGsv3Wu/Y3d+2cEyQrUpJYmE4dSyA0zCYp4FxXumMz5KcUh0IlBoew==}
+    dev: false
 
   /@rollup/rollup-android-arm-eabi@4.5.0:
     resolution: {integrity: sha512-OINaBGY+Wc++U0rdr7BLuFClxcoWaVW3vQYqmQq6B3bqQ/2olkaoz+K8+af/Mmka/C2yN5j+L9scBkv4BtKsDA==}
