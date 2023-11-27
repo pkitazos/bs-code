@@ -1,5 +1,6 @@
 import { FilePlus, FolderPlus } from "lucide-react";
 import { Button } from "./Button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./Accordion";
 
 export function Sidebar({
   allFiles,
@@ -45,24 +46,17 @@ export function Sidebar({
           <div className="bg-neutral-800 h-10 flex justify-start pl-10 items-center font-semibold">
             Function Voice Recordings
           </div>
-          
-          <div className="hs-accordion-group">
-            <div className="hs-accordion active" id="hs-basic-heading-one">
-              <button className="hs-accordion-toggle hs-accordion-active:text-blue-600 px-6 py-3 inline-flex items-center gap-x-3 text-sm w-full font-semibold text-start text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:hs-accordion-active:text-blue-500 dark:text-gray-200 dark:hover:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-controls="hs-basic-collapse-one">
-                <svg className="hs-accordion-active:hidden hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 block w-4 h-4 text-gray-600 group-hover:text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                <svg className="hs-accordion-active:block hs-accordion-active:text-blue-600 hs-accordion-active:group-hover:text-blue-600 hidden w-4 h-4 text-gray-600 group-hover:text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
-                Accordion #1
-              </button>
-            <div id="hs-basic-collapse-one" className="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-heading-one">
-              <div className="pb-4 px-6">
-                <p className="text-sm text-gray-600 dark:text-gray-200">
-                  It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
 
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Is it accessible?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It adheres to the WAI-ARIA design pattern.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          
           <ul className="pl-10 pt-10">
             {activeFileIdx !== -1 &&
               allFiles[activeFileIdx].functions.length !== 0 &&
