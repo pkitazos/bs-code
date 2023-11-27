@@ -1,6 +1,6 @@
 import { useWindowSize } from "@uidotdev/usehooks";
-import { useEffect, useState } from "react";
-import { MyEditor, RecordVoiceNote, Sidebar } from "./components";
+import { useState } from "react";
+import { Editor, RecordVoiceNote, Sidebar } from "./components";
 
 function App() {
   const { width, height } = useWindowSize();
@@ -27,26 +27,19 @@ function App() {
     setActiveFileIdx(-1);
   };
 
-  useEffect(() => {
-    console.log(activeFileIdx);
-  }, [activeFileIdx]);
-
-  useEffect(() => {
-    console.log("blobs:", blobs);
-  }, [blobs]);
-
   if (!(height && width)) return;
   return (
     <div className="grid grid-cols-10 h-[100dvh]">
       <Sidebar
         allFiles={allFiles}
         activeFileIdx={activeFileIdx}
+        setAllFiles={setAllFiles}
         setActiveFileIdx={setActiveFileIdx}
       />
       <div className="col-span-8 bg-neutral-800 h-[100dvh]">
         {activeFileIdx !== -1 ? (
           <>
-            <MyEditor
+            <Editor
               allFiles={allFiles}
               activeFileIdx={activeFileIdx}
               setAllFiles={setAllFiles}

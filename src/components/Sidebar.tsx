@@ -1,19 +1,34 @@
+import { Trash2 } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./Accordion";
+import { Button } from "./Button";
 
 export function Sidebar({
   allFiles,
   activeFileIdx,
+  setAllFiles,
   setActiveFileIdx,
 }: {
   allFiles: CodeFile[];
   activeFileIdx: number;
+  setAllFiles: React.Dispatch<React.SetStateAction<CodeFile[]>>;
   setActiveFileIdx: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const handleDelete = (fnName: string) => {
+    const temp = structuredClone(allFiles);
+
+    const idx = allFiles[activeFileIdx].functions
+      .map((item) => item.name)
+      .indexOf(fnName);
+
+    temp[activeFileIdx].functions[idx].audioURL = "";
+    setAllFiles(temp);
+  };
+
   return (
     <div className="text-white col-span-2 h-[100dvh] bg-neutral-900">
       <div className="text-xl h-[5dvh] flex justify-start pl-10 items-center">
@@ -52,9 +67,16 @@ export function Sidebar({
                       <AccordionTrigger disabled={audioURL === ""}>
                         {name}
                       </AccordionTrigger>
-                      {audioURL && (
-                        <AccordionContent>
+                      {audioURL !== "" && (
+                        <AccordionContent className="flex gap-5 items-center">
                           <audio key={i} src={audioURL} controls />
+                          <Button
+                            size="lg"
+                            className="bg-red-500 hover:bg-red-600"
+                            onClick={() => handleDelete(name)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </AccordionContent>
                       )}
                     </AccordionItem>
