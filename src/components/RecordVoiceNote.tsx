@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Mic, Save } from "lucide-react";
+import { Mic, Save, Trash2, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ReactMic } from "react-mic";
 import Select from "react-select";
@@ -36,9 +36,18 @@ export function RecordVoiceNote({
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [selected, setSelected] = useState<SelectOption | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setAudioBlob(null);
+    setSelected(null);
+    setModalIsOpen(false);
+  };
 
   const options = allFiles.flatMap((file) =>
-    file.functions.map((fn) => ({ value: fn.name, label: fn.name }))
+    file.functions
+      .filter((item) => item.audioURL === "")
+      .map((item) => ({ value: item.name, label: item.name }))
   );
 
   const handleSave = () => {
@@ -50,8 +59,7 @@ export function RecordVoiceNote({
 
     if (selectedFn) selectedFn.audioURL = audioUrl;
 
-    setAudioBlob(null);
-    setSelected(null);
+    closeModal();
   };
 
   useEffect(() => {
@@ -61,40 +69,77 @@ export function RecordVoiceNote({
   }, [audioBlob]);
 
   return (
-    <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
-      <div>
-        <Button size="md" onClick={() => setIsRecording(!isRecording)}>
+    <>
+      <div className="fixed bottom-0 w-full flex items-center h-[5dvh] bg-neutral-900 text-white">
+        <Button
+          className="bg-red-900 hover:bg-red-950"
+          size="sm"
+          onClick={() => setModalIsOpen(true)}
+        >
           <Mic className="w-4 h-4" />
-          {isRecording ? "Recording..." : "Start Recording"}
+          Record Voice Note
         </Button>
-      </div>
-      <div className="m-5">
-        <Select
-          value={selected}
-          onChange={setSelected}
-          options={options}
-          styles={customStyles}
-          menuPlacement="top"
+        <ReactMic
+          className="hidden"
+          record={isRecording}
+          onStop={(e) => setAudioBlob(e.blob)}
+          strokeColor="transparent"
+          backgroundColor="transparent"
         />
       </div>
-      <div>
-        {audioBlob && (
-          <div className="flex gap-4 items-center">
-            <audio ref={audioRef} controls />
-            <Button size="md" className="bg-indigo-700" onClick={handleSave}>
-              <Save className="w-4 h-4" />
-              Save Recording
-            </Button>
+      {modalIsOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-[rgba(0, 0, 0, 0.5)] justify-center items-center flex">
+          <div className="bg-black p-5 rounded-sm shadow-lg flex flex-col gap-2 min-w-[400px]">
+            <div className="flex w-full justify-end">
+              <Button size="sm" className="bg-transparent" onClick={closeModal}>
+                <X />
+              </Button>
+            </div>
+            <h2 className="text-white">Select Function:</h2>
+            <Select
+              value={selected}
+              onChange={setSelected}
+              options={options}
+              styles={customStyles}
+              menuPlacement="top"
+            />
+            {selected && audioBlob && (
+              <audio className="mt-4 mb-2 w-full" ref={audioRef} controls />
+            )}
+            {selected && (
+              <>
+                <div className="flex justify-between gap-3 mt-2.5">
+                  <Button
+                    className="bg-red-900 hover:bg-red-950"
+                    size="sm"
+                    onClick={() => setIsRecording(!isRecording)}
+                  >
+                    <Mic className="w-4 h-4" />
+                    {isRecording ? "Stop Recording" : "Start Recording"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    disabled={!audioBlob}
+                    onClick={() => setAudioBlob(null)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-lime-600"
+                    disabled={!audioBlob}
+                    size="sm"
+                    onClick={handleSave}
+                  >
+                    <Save className="w-4 h-4" />
+                    Save
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
-        )}
-      </div>
-      <ReactMic
-        className="hidden"
-        record={isRecording}
-        onStop={(e) => setAudioBlob(e.blob)}
-        strokeColor="transparent"
-        backgroundColor="transparent"
-      />
-    </div>
+        </div>
+      )}
+    </>
   );
 }
