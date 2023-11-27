@@ -1,3 +1,10 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./Accordion";
+
 export function Sidebar({
   allFiles,
   activeFileIdx,
@@ -34,14 +41,25 @@ export function Sidebar({
           <div className="bg-neutral-800 h-10 flex justify-start pl-10 items-center font-semibold">
             Function Voice Recordings
           </div>
+
           <ul className="pl-10 pt-10">
             {activeFileIdx !== -1 &&
               allFiles[activeFileIdx].functions.length !== 0 &&
               allFiles[activeFileIdx].functions.map(({ name, audioURL }, i) => (
-                <>
-                  <li key={i}>{name}</li>
-                  {audioURL && <audio key={i} src={audioURL} controls />}
-                </>
+                <li key={i}>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger disabled={audioURL === ""}>
+                        {name}
+                      </AccordionTrigger>
+                      {audioURL && (
+                        <AccordionContent>
+                          <audio key={i} src={audioURL} controls />
+                        </AccordionContent>
+                      )}
+                    </AccordionItem>
+                  </Accordion>
+                </li>
               ))}
           </ul>
         </div>
