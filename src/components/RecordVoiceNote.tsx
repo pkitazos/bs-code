@@ -4,7 +4,6 @@ import { Mic, Save } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { ReactMic } from "react-mic";
 import Select from "react-select";
-import "../RecordVoiceNote.css";
 import { Button } from "./Button";
 
 type SelectOption = { value: string; label: string };
@@ -89,14 +88,13 @@ export function RecordVoiceNote({
           </div>
         )}
       </div>
-      <div className="hideAudio">
-        <ReactMic
-          record={isRecording}
-          onStop={(e) => setAudioBlob(e.blob)}
-          strokeColor="transparent"
-          backgroundColor="transparent"
-        />
-      </div>
+      <ReactMic
+        className="hidden"
+        record={isRecording}
+        onStop={(e) => setAudioBlob(e.blob)}
+        strokeColor="transparent"
+        backgroundColor="transparent"
+      />
     </div>
   );
 }
