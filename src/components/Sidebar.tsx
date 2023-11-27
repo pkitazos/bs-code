@@ -47,23 +47,25 @@ export function Sidebar({
             Function Voice Recordings
           </div>
 
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Is it accessible?</AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-
-          
           <ul className="pl-10 pt-10">
             {activeFileIdx !== -1 &&
               allFiles[activeFileIdx].functions.length !== 0 &&
-              allFiles[activeFileIdx].functions.map(({ name }, i) => (
-                <li key={i}>{name}</li>
+              allFiles[activeFileIdx].functions.map(({ name, mediaRecordingPath}, i) => (
+                <li key={i}>  
+                <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <AccordionTrigger disabled={mediaRecordingPath===""}>{name}</AccordionTrigger>
+                  {mediaRecordingPath &&
+                  <AccordionContent>
+                     <audio key={i} src={mediaRecordingPath} controls />
+                  </AccordionContent>
+                  }
+                </AccordionItem>
+              </Accordion>
+              </li>
               ))}
           </ul>
+          
         </div>
       </div>
     </div>
